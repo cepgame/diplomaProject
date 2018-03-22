@@ -17,20 +17,11 @@ public class SessionUtil {
     }
 
     public Session openSession() {
-        System.err.println("!!!!!!!!!!: " + HibernateUtil.getSessionFactory()) ;
-        System.err.println("!!!!!!!!!!: " + HibernateUtil.getSessionFactory().openSession()) ;
-
         return HibernateUtil.getSessionFactory().openSession();
     }
 
     public Session openTransactionSession() {
         session = openSession();
-
-        if(session == null) {
-            System.out.println("NULL");
-        } else {
-            System.out.println("IS NOT NULL ");
-        }
 
         transaction = session.beginTransaction();
         return session;

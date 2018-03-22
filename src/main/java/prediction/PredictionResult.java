@@ -9,9 +9,11 @@ public class PredictionResult {
     private Double yearBasedRisk;
     private Double monthBasedRisk;
     private Double weekBasedRisk;
+    private List<Double> rawProbability;
 
     PredictionResult(String drug, List<Double> rawProbability) {
         this.drug = drug;
+        this.rawProbability = rawProbability;
 
         // Im not sure that its right way to calculate probability for different classification problems
         decadeBasedRisk  = rawProbability.get(2) + rawProbability.get(3) + rawProbability.get(4) + rawProbability.get(5)
@@ -40,6 +42,14 @@ public class PredictionResult {
 
     public Double getWeekBasedRisk() {
         return weekBasedRisk;
+    }
+
+    public List<Double> getRawProbability() {
+        return rawProbability;
+    }
+
+    public void setRawProbability(List<Double> rawProbability) {
+        this.rawProbability = rawProbability;
     }
 
     @Override

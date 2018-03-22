@@ -18,6 +18,7 @@ public strictfp class Predict {
     public static strictfp List<PredictionResult> getPrediction(String inputStr) {
 //        String drugsStr = "alcohol,amphetamin,amyl,benzodiazepine,caffein,canabis,chocolate,cocain,crack,ecstasy,heroin,ketamin,legal_highs,lsd,methadone,mushrooms,nicotine,semer,vsa";
         // TODO: use drugs enum
+        // TODO: пагинация и кликхоус, use doker for database
         String drugsStr = "alcohol,amphetamin,amyl,benzodiazepine,caffein";
         String[] drugs = drugsStr.split(",");
 

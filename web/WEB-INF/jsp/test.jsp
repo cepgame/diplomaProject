@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -7,10 +8,22 @@
 </head>
 <body>
 
-<form:form method="post" action="/test">
+<form:form modelAttribute="survey" method="post" action="/survey">
 
-    <%--<form:radiobutton path="field" value="testValue"/>--%>
+    1. Мне нравится заниматься  физкультурой
+        <form:radiobuttons path="field" items="${testItem}" />
+    Я не люблю физические нагрузки
+
+    2. Люди считают меня отзывчивым и  доброжелательным человеком
+        <form:radiobuttons path="field2" items="${testItem}" />
+    Некоторые люди считают меня  холодным и черствым
+
+    <c:forEach items="${survey.answers}" var="answer">
+        <form:radiobuttons path="answers" items="${testItem}"/> <br/>
+    </c:forEach>
+
     <input type="submit" value="send"/>
+    <%--<form:input path="path" />--%>
 </form:form>
 
 1. Мне нравится заниматься  физкультурой 	-2 	-1 	0 	1 	2 	Я не люблю физические нагрузки

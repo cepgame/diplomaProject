@@ -20,7 +20,6 @@
     <%--<br/>--%>
     <%--<br/>--%>
 
-    <%-- TODO: create dropmenu for input parameters--%>
     <%-- Age --%>
     <%--<label for="age">Age:</label>--%>
     <%--<select id="age" name="age">--%>

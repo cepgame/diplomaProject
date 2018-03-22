@@ -15,6 +15,7 @@
         <th>Year-based</th>
         <th>Month-based</th>
         <th>Week-based</th>
+        <th>Raw Probability</th>
     </tr>
     <c:forEach items="${result}" var="res">
         <tr>
@@ -23,6 +24,12 @@
             <td>${res.yearBasedRisk}</td>
             <td>${res.monthBasedRisk}</td>
             <td>${res.weekBasedRisk}</td>
+            <td>
+                <c:forEach items="${res.rawProbability}" var="risk">
+                    ${risk}
+                </c:forEach>
+            </td>
+
         </tr>
     </c:forEach>
 </table>

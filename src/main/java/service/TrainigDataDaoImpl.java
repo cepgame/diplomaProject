@@ -25,6 +25,7 @@ public class TrainigDataDaoImpl extends SessionUtil implements TrainingDataDao {
         openTransactionSession();
         Session session = getSession();
 
+        // Throws NoSuchMethodException on setMaxResult
         Query query = session.createNativeQuery(sql).addEntity(PersonalData.class).setCacheable(true).setMaxResults(100);
         List<PersonalData> trainingData = query.getResultList();
 
