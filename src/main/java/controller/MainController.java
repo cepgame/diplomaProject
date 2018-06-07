@@ -1,18 +1,23 @@
 package controller;
 
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import survey.Survey;
 import entity.PersonalData;
+import prediction.Chart;
+import prediction.Predict;
+import prediction.PredictionResult;
 import service.TrainigDataDaoImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // TODO: rework controller
 @Controller
@@ -23,7 +28,7 @@ public class MainController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/")
     public String welcome(Model model) {
-        return "welcomePage";
+        return "welcome2";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/inputData")
@@ -43,6 +48,12 @@ public class MainController {
 
         return model;
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/test")
+    public String test() {
+
+        return "testGraph";
+    }
 //    This case works 2
 //    public String test(ModelMap model) {
 //        TrainigDataDaoImpl service = new TrainigDataDaoImpl();
@@ -51,24 +62,40 @@ public class MainController {
 //        return "trainingData";
 //    }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/survey")
-    public String showTestForm(Model model) {
-        model.addAttribute("survey", new Survey());
-        List<Integer> tmp = new ArrayList<>();
-        tmp.add(-2);
-        tmp.add(-1);
-        tmp.add(0);
-        tmp.add(1);
-        tmp.add(2);
+    @RequestMapping(method = RequestMethod.GET, value = "/test2")
+    public String test2(ModelMap model){
+        String str = "0.49788,0.48246,-0.05921,0.96082,0.12600,0.31287,-0.57545,-0.58331,-0.91699,-0.00665,-0.21712,-1.18084";
 
-        model.addAttribute("testItem", tmp);
-        return "test";
-    }
+        List<PredictionResult> predictionResult = Predict.getPrediction(str);
 
-    @RequestMapping(method = RequestMethod.POST, value = "/survey")
-    public String parseTest(@ModelAttribute("SpringWeb")Survey survey, ModelMap model) {
-        model.addAttribute("survey", survey);
+//      GRAPH
+//      Data for graph;
+        Gson gsonObj = new Gson();
+        Map<Object,Object> map = null;
+        List<Chart> charts = new ArrayList<>();
 
-        return "testRes";
+        for(int i = 0; i < 3; i++) {
+            List<Map<Object,Object>> list = new ArrayList<Map<Object,Object>>();
+
+            int j = 0;
+            for (Double d : predictionResult.get(i).getRawProbability()) {
+                map = new HashMap<Object,Object>();
+                map.put("label", "CL" + Integer.toString(j));
+                map.put("y", d);
+                list.add(map);
+                j++;
+            }
+
+            Chart chart = new Chart();
+            chart.setContainer("chartContainer"+i);
+            chart.setDatapoints(gsonObj.toJson(list));
+            chart.setTitle(predictionResult.get(i).getDrug());
+
+            charts.add(chart);
+        }
+
+        model.addAttribute("charts", charts);
+
+        return "prediction2";
     }
 }

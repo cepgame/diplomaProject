@@ -16,6 +16,7 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.ui.api.UIServer;
 import org.deeplearning4j.ui.stats.StatsListener;
+import org.deeplearning4j.ui.storage.FileStatsStorage;
 import org.deeplearning4j.ui.storage.InMemoryStatsStorage;
 import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
@@ -33,7 +34,7 @@ public strictfp class PredictTrain {
     private static Logger log = LoggerFactory.getLogger(PredictTrain.class);
 
     public static void main(String[] args) {
-        trainAndSaveModel(Drugs.cocain.toString());
+        trainAndSaveModel(Drugs.alcohol.toString());
     }
 
     private static void trainAndSaveModel(String fileName) {
@@ -55,7 +56,7 @@ public strictfp class PredictTrain {
             // Contain all data in batch
             DataSet allData = iterator.next();
             // Shuffle rows
-//            allData.shuffle();
+            allData.shuffle();
 
             SplitTestAndTrain testAndTrain = allData.splitTestAndTrain(0.5);
             DataSet test = testAndTrain.getTest();
@@ -64,8 +65,8 @@ public strictfp class PredictTrain {
             final int numInputs = 12;
             long seed = 123456;
             double learningRate = 0.0005;
-            int iterations = 10;
-            int numEpochs = 10;
+            int iterations = 1;
+            int numEpochs = 100;
 
             // Create and configure the NN model
             log.info("Build model...");
@@ -82,22 +83,22 @@ public strictfp class PredictTrain {
                     .list()
                     .layer(0, new DenseLayer.Builder()
                             .nIn(numInputs)
-                            .nOut(10)
+                            .nOut(numInputs)
                             .build())
                     .layer(1, new DenseLayer.Builder()
-                            .nIn(10)
-                            .nOut(10)
+                            .nIn(numInputs)
+                            .nOut(numInputs)
                             .build())
                     .layer(2, new DenseLayer.Builder()
-                            .nIn(10)
-                            .nOut(10)
+                            .nIn(numInputs)
+                            .nOut(numInputs)
                             .build())
                     .layer(3, new DenseLayer.Builder()
-                            .nIn(10)
-                            .nOut(10)
+                            .nIn(numInputs)
+                            .nOut(numInputs)
                             .build())
                     .layer(4, new OutputLayer.Builder()
-                            .nIn(10)
+                            .nIn(numInputs)
                             .nOut(7)
                             .activation(Activation.SOFTMAX)
                             .build())
@@ -106,11 +107,13 @@ public strictfp class PredictTrain {
 
             // Run the model
             MultiLayerNetwork model = new MultiLayerNetwork(conf);
+
             model.init();
 
             // Start the ui web-server
             UIServer uiServer = UIServer.getInstance();
-            StatsStorage statsStorage = new InMemoryStatsStorage();
+//            StatsStorage statsStorage = new InMemoryStatsStorage();
+            StatsStorage statsStorage = new FileStatsStorage(new File("f"));
             uiServer.attach(statsStorage);
             model.setListeners(new StatsListener(statsStorage));
 
@@ -128,6 +131,7 @@ public strictfp class PredictTrain {
 
             // Save model to file
             ModelSerializer.writeModel(model,modelName,true);
+//            ModelSerializer.writeModel(model, System);
 
             // Evaluate model
             evalModel(model, test);

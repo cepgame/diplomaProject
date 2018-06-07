@@ -10,8 +10,12 @@ import java.util.List;
 
 public strictfp class Predict {
 
+    static String modelPath = "/home/Jasow/diplom/diplomaProject/";
+    //static String modelPath = "D:\\diplomaProject\\";
+
     /***
      * Predict drug usage for all drugs from list
+     *
      * @param inputStr is input String from web form
      * @return List of PredictionResult class contains probability for different classification problems
      */
@@ -62,15 +66,10 @@ public strictfp class Predict {
 
             // Load model
             //  TODO: check if the model is exists else create it with PredictTrain.
-            File modelFile = new File("/home/Jasow/diplom/diplomaProject/" + drug + ".net");
+            File modelFile = new File(modelPath + drug + ".net");
             MultiLayerNetwork model = ModelSerializer.restoreMultiLayerNetwork(modelFile);
 
-            // Get the prediction
-            if (model != null) {
-                prediction = model.output(data);
-            } else {
-                throw new Exception("Model is null!");
-            }
+            prediction = model.output(data);
 
         } catch (Exception e) {
             e.getMessage();

@@ -2,6 +2,10 @@ package prediction;
 
 import java.util.List;
 
+/**
+ * Class represents results of prediction probability
+ *
+ */
 public class PredictionResult {
     private String drug;
 
@@ -16,11 +20,11 @@ public class PredictionResult {
         this.rawProbability = rawProbability;
 
         // Im not sure that its right way to calculate probability for different classification problems
-        decadeBasedRisk  = rawProbability.get(2) + rawProbability.get(3) + rawProbability.get(4) + rawProbability.get(5)
-                + rawProbability.get(6);
-        yearBasedRisk = rawProbability.get(3) + rawProbability.get(4) + rawProbability.get(5) + rawProbability.get(6);
-        monthBasedRisk = rawProbability.get(4) + rawProbability.get(5) + rawProbability.get(6);
-        weekBasedRisk = rawProbability.get(5) + rawProbability.get(6);
+        decadeBasedRisk  = rawProbability.get(2) * rawProbability.get(3) * rawProbability.get(4) * rawProbability.get(5)
+                * rawProbability.get(6);
+        yearBasedRisk = rawProbability.get(3) * rawProbability.get(4) * rawProbability.get(5) * rawProbability.get(6);
+        monthBasedRisk = rawProbability.get(4) * rawProbability.get(5) * rawProbability.get(6);
+        weekBasedRisk = rawProbability.get(5) * rawProbability.get(6);
     }
 
 

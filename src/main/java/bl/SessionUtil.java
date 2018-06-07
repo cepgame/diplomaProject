@@ -27,7 +27,7 @@ public class SessionUtil {
         return session;
     }
 
-    public void closeSession() {
+    private void closeSession() {
         session.close();
     }
 

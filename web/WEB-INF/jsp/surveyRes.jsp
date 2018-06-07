@@ -14,6 +14,7 @@
         ARRAY:
         <c:forEach items="${survey.answers}" var="answer">
             <b>${answer}</b> <br/>
+            ${survey.answers.size()}
         </c:forEach>
 </body>
 </html>
